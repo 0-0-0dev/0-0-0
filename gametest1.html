@@ -1,63 +1,166 @@
-<html lang="en" style="height: 100%;"><head>
-
-    <base href="https://cdn.jsdelivr.net/gh/web-dashers/web-dashers.github.io@9f086b9cd3297b9ab9625cf49ccb602a547ecae6/">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Web Dashers</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-    <link rel="stylesheet" href="assets/style.css">
-    <meta name="description" content="Web Dashers is a fan-made browser mod of the Geometry Dash Web Demo. It features the main levels, a built-in level creator, and a level search to play online levels. The project is actively in development, with more features and updates planned.">
-    <meta name="theme-color" content="#C1FB3D">
-
-    <!-- - Embeds - -->
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://web-dashers.github.io/">
-    <meta property="og:title" content="Web Dashers">
-    <meta property="og:description" content="Web Dashers is a fan-made browser mod of the Geometry Dash Web Demo. It features the main levels, a built-in level creator, and a level search to play online levels. The project is actively in development, with more features and updates planned.">
-    <meta property="og:image" content="https://web-dashers.github.io/wd_assets/thumbnail_1024.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://web-dashers.github.io/">
-    <meta property="twitter:title" content="Web Dashers">
-    <meta property="twitter:description" content="Web Dashers is a fan-made browser mod of the Geometry Dash Web Demo. It features the main levels, a built-in level creator, and an evel search to play online levels. The project is actively in development, with more features and updates planned.">
-    <meta property="twitter:image" content="https://web-dashers.github.io/wd_assets/thumbnail_1024.png">
-
-    <!-- Libraries and stuff -->
-    <script src="assets/scripts/game/allObjects.js?latest"></script>
-    <script src="assets/scripts/game/allLevels.js"></script>
-    <script src="assets/scripts/libs/phaser.min.js"></script>
-    <script src="assets/scripts/libs/pako.min.js"></script>
-    <script src="assets/scripts/utils/cache-manager.js"></script>
-    <script src="assets/scripts/api/GDapiWrapper.js"></script>
-    <script src="assets/scripts/utils/api-config.js"></script>
-    <script src="assets/scripts/api/account-api.js"></script>
-    <!-- worker -->
-    <script>
-        window._gdProxyUrl = "https://gd-proxy.gmdc.workers.dev";
-    </script>
-    <script defer="" src="assets/scripts/utils/config.js"></script>
-    <script defer="" src="assets/scripts/core/triggers.js"></script>
-    <script defer="" src="assets/scripts/core/level.js?latest"></script>
-    <script defer="" src="assets/scripts/core/player.js?latehkjthykhst"></script>
-    <script defer="" src="assets/scripts/core/audio.js"></script>
-    <script defer="" src="assets/scripts/core/loading-screen.js"></script>
-    <script defer="" src="assets/scripts/core/level-editor.js?latest"></script>
-    <script defer="" src="assets/scripts/core/game-scene.js?latest3"></script>
-    <script defer="" src="assets/scripts/core/main.js"></script>
-    <script>
-        new ResizeObserver(() => {
-            window.dispatchEvent(new Event('resize'));
-        }).observe(document.documentElement);
-
-        document.oncontextmenu = (event) => {
-            event.preventDefault();
-        };
-    </script>
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="https://cdn.jsdelivr.net/gh/Katsugachi/deltarune@main/">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
 </head>
+<body>
+  <div class="logo-container">
+    <img src="logo.png" alt="Logo" class="logo">
+  </div>
+  
+  <div class="menu">
+    <a href="javascript:loadChapter(1)" class="row">
+      <span class="chapter">Chapter 1</span>
+      <span class="title">The Beginning</span>
+      <img src="icons/1.png">
+    </a>
+    <a href="javascript:loadChapter(2)" class="row">
+      <span class="chapter">Chapter 2</span>
+      <span class="title">A Cyber's World</span>
+      <img src="icons/2.png">
+    </a>
+    <a href="javascript:loadChapter(3)" class="row">
+      <span class="chapter">Chapter 3</span>
+      <span class="title">Late Night</span>
+      <img src="icons/3.png">
+    </a>
+    <a href="javascript:loadChapter(4)" class="row">
+      <span class="chapter">Chapter 4</span>
+      <span class="title">Prophecy</span>
+      <img src="icons/4.png">
+    </a>
+    <a href="javascript:loadChapter(5)" class="row">
+      <span class="chapter">Chapter 5</span>
+      <span class="title">Festival Day</span>
+      <img src="icons/5.png">
+    </a>
+  </div>
+  <audio id="drone" controls loop autoplay hidden>
+    <source src="audios/AUDIO_DRONE.ogg" type="audio/ogg">
+    your slow ass browser doesnt support AUDIO?
+  </audio>
+  <button id="mute">🔊</button>
+  <script>
+    const audio = document.getElementById('drone');
+    const mute = document.getElementById('mute');
+    let gamestarted = false;
+  
+    mute.addEventListener('click', () => {
+      if (!gamestarted) {
+        audio.muted = !audio.muted;
+        updateButton(); 
+      }
+    });
+  
+    function updateButton() {
+      if (!gamestarted) {
+        mute.textContent = audio.muted ? '🔊' : '🔇';
+      }
+    }
+  
+    updateButton();
 
-<body style="height: 100%;">
+    function loadChapter(chapter) {
+      fetch(`chapter${chapter}/index.html`)
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.text();
+        })
+        .then(html => {
+          gamestarted = true;
+          
+          let targetBase = '';
+          if (chapter >= 1 && chapter <= 4) {
+            targetBase = `https://cdn.jsdelivr.net/gh/technonyte00/deltarune@main/chapter${chapter}/`;
+          } else if (chapter === 5) {
+            targetBase = `https://cdn.jsdelivr.net/gh/Katsugachi/deltarune@main/chapter5/`;
+          }
+          
+          if (targetBase) {
+            if (/<base\s+href="[^"]*"/gi.test(html)) {
+              html = html.replace(/<base\s+href="[^"]*"/gi, `<base href="${targetBase}"`);
+            } else {
+              if (/<head>/i.test(html)) {
+                html = html.replace(/<head>/i, `<head>\n  <base href="${targetBase}">`);
+              } else {
+                html = `<base href="${targetBase}">\n` + html;
+              }
+            }
+          }
 
+          document.open();
+          document.write(html);
+          document.close();
+        })
+        .catch(err => {
+          console.error("Error loading chapter:", err);
+          alert(`Failed to load Chapter ${chapter}. Please try again.`);
+        });
+    }
 
-<canvas width="1138" height="640" style="width: 811px; height: 456.098px; margin-left: 0px; margin-top: 155px;"></canvas></body></html>
+    const menumoveaudio = new Audio('audios/snd_menumove.mp3');
+    const menuselectaudio = new Audio('audios/snd_select.mp3');
+    document.querySelectorAll('.row').forEach(row => {
+      row.addEventListener('mouseenter', () => {
+        if (!gamestarted) {
+          menumoveaudio.play().catch(e => console.log('Playback prevented:', e));
+          if (selectedChapter !== null) {
+            document.querySelectorAll('.row')[selectedChapter].classList.remove("selected");
+          }
+        }
+      });
+      row.addEventListener('click', () => {
+        if (!gamestarted) {
+          menuselectaudio.play().catch(e => console.log('Playback prevented:', e));
+        }
+      });
+    });
+
+    let selectedChapter = null;
+    document.addEventListener('keydown', function(event) {
+      if (!gamestarted) {
+      if (event.key === 'ArrowUp') {
+        if (selectedChapter === null) {
+          selectedChapter = 0;
+          document.querySelectorAll('.row')[0].classList.add("selected");
+          menumoveaudio.play().catch(e => console.log('Playback prevented:', e));
+        } else {
+          document.querySelectorAll('.row')[selectedChapter].classList.remove("selected");
+          selectedChapter--;
+          if (selectedChapter < 0) {
+            selectedChapter = document.querySelectorAll('.row').length - 1;
+          }
+          document.querySelectorAll('.row')[selectedChapter].classList.add("selected");
+          menumoveaudio.play().catch(e => console.log('Playback prevented:', e));
+        }
+      } else if (event.key === 'ArrowDown') {
+        if (selectedChapter === null) {
+          selectedChapter = 0;
+          document.querySelectorAll('.row')[0].classList.add("selected");
+          menumoveaudio.play().catch(e => console.log('Playback prevented:', e));
+        } else {
+          if (selectedChapter+1 >= document.querySelectorAll('.row').length) {
+            document.querySelectorAll('.row')[selectedChapter].classList.remove("selected");
+            selectedChapter = 0;
+            document.querySelectorAll('.row')[0].classList.add("selected");
+            menumoveaudio.play().catch(e => console.log('Playback prevented:', e));
+          } else {
+            document.querySelectorAll('.row')[selectedChapter].classList.remove("selected");
+            selectedChapter++;
+            document.querySelectorAll('.row')[selectedChapter].classList.add("selected");
+            menumoveaudio.play().catch(e => console.log('Playback prevented:', e));
+          }
+        }
+      } else if (event.key === 'Enter') {
+        if (selectedChapter !== null) {
+          menuselectaudio.play().catch(e => console.log('Playback prevented:', e));
+          loadChapter(selectedChapter + 1);
+        } 
+      }
+      }
+    });
+  </script>
+</body>
+</html>
